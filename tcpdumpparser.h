@@ -13,23 +13,23 @@ class TcpDumpParser
 public:
 	TcpDumpParser(std::istream& input_stream = std::cin);
 
-	struct record
+	struct dns_packet
 	{
-		std::string type, value;
-	};
+		struct record
+		{
+			std::string type, value;
+		};
 
-	struct packet
-	{
 		time_t time;
 		unsigned id;
-		std::string from, to;
+		std::string from, to, type;
 		std::vector<record> records;
 	};
 
-	packet getNextPacket();
+	dns_packet getNextPacket();
 
 private:
-	static packet parce(const std::string& dump_str);
+	static dns_packet parce(const std::string& dump_str);
 };
 
 #endif //TCPSUMPPARSER_H
