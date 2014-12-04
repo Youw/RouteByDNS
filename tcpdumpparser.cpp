@@ -76,8 +76,24 @@ bool TcpDumpParser::is_last_trash(const std::string& str)
 			slash_count++;
 			return true;
 		}
-		return std::isdigit(c);
+		return std::isdigit(c)!=0;
 	});
 	if (ok && slash_count==2) return true;
 	if (str == "[1au]") return true;
+	return false;
+}
+
+void TcpDumpParser::print_packet(const dns_packet& packet)
+{
+	std::cout
+		<< " When: " << packet.time
+		<< " from: " << packet.from
+		<< " to: " << packet.to
+		<< " id: " << packet.id
+		<< " type: " << packet.type
+		<< " records:" << std::endl;
+	for (auto& rec : packet.records) {
+		std::cout << '\t' << rec.type << ' ' << rec.value << std::endl;
+	}
+	std::cout << std::endl;
 }

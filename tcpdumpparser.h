@@ -28,6 +28,7 @@ public:
 
 	dns_packet getNextPacket();
 
+	static void print_packet(const dns_packet& packet);
 private:
 	static dns_packet parce(const std::string& dump_str);
 	static bool is_last_trash(const std::string& str);

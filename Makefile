@@ -1,4 +1,4 @@
-SOURCES=main.cpp tcpdumpparser.cpp
+SOURCES=main.cpp tcpdumpparser.cpp dnsipprocessor.cpp dnspacketprocessor.cpp
 GXX_FLAGS=-std=c++11 -O2 -pipe -MMD -MP
 BUILD_DIR=bin/
 OUTPUT_NAME=route_by_dns
