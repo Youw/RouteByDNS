@@ -1,5 +1,6 @@
 #include "tcpdumpparser.h"
 
+#include <algorithm>
 #include <sstream>
 
 TcpDumpParser::TcpDumpParser(std::istream& input_stream): input(input_stream)
@@ -38,14 +39,20 @@ TcpDumpParser::dns_packet TcpDumpParser::parce(const std::string& dump_str)
 		tmp >> result.id >> result.type;
 	}
 
-	str >> buffer;// trash;
-	while (std::getline(str, buffer, ',')) {
-		dns_packet::record record;
-		std::stringstream tmp(buffer);
-		tmp >> record.type >> record.value;
-		if (record.type != "") {
-			result.records.push_back(record);
+	str >> buffer;
+	std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
+	if (!buffer.find("nxdomain")) {
+		while (std::getline(str, buffer, ',')) {
+			dns_packet::record record;
+			std::stringstream tmp(buffer);
+			tmp >> record.type >> record.value;
+			if (record.type != "") {
+				result.records.push_back(record);
+			}
 		}
+	}
+	else {
+		result.records.push_back({"nxdomain",""});
 	}
 
 	return result;
