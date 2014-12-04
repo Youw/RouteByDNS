@@ -41,7 +41,7 @@ TcpDumpParser::dns_packet TcpDumpParser::parce(const std::string& dump_str)
 
 	str >> buffer;
 	std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
-	if (!buffer.find("nxdomain")) {
+	if (buffer.find("nxdomain")==buffer.npos) {
 		while (std::getline(str, buffer, ',')) {
 			dns_packet::record record;
 			std::stringstream tmp(buffer);
