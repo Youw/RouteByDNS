@@ -8,7 +8,11 @@
 DNSIPProcessor::DNSIPProcessor(const NameList& allowed_dns_names) :
 	allowed_names(allowed_dns_names)
 {
-
+#ifndef WIN32
+	system(("/etc/route_by_dns/startup.sh").c_str());
+#else
+	std::cout << "/etc/route_by_dns/startup.sh";
+#endif
 }
 
 void DNSIPProcessor::process(const dns_ip& query)
