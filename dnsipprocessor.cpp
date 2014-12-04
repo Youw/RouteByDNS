@@ -9,7 +9,8 @@ DNSIPProcessor::DNSIPProcessor(const NameList& allowed_dns_names) :
 	allowed_names(allowed_dns_names)
 {
 #ifndef WIN32
-	system("/etc/route_by_dns/startup.sh");
+	int system_ret = system("/etc/route_by_dns/startup.sh");
+	(void)system_ret;
 #else
 	std::cout << "/etc/route_by_dns/startup.sh";
 #endif
@@ -36,7 +37,8 @@ void DNSIPProcessor::addToWhiteList(const std::string& ip, const std::string& na
 	if (!ipInWhiteList(ip)) {
 		allowed_ip.insert(ip);
 #ifndef WIN32
-		system(("/etc/route_by_dns/add_ip.sh "+ip+" "+name).c_str());
+		int system_ret = system(("/etc/route_by_dns/add_ip.sh " + ip + " " + name).c_str());
+		(void)system_ret;
 #else
 		std::cout << ("/etc/route_by_dns/add_ip.sh " + ip + " " + name).c_str();
 #endif
