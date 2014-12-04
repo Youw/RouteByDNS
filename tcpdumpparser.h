@@ -30,6 +30,8 @@ public:
 
 private:
 	static dns_packet parce(const std::string& dump_str);
+	static bool is_last_trash(const std::string& str);
+	static bool is_nxdomain(const std::string& str);
 };
 
 #endif //TCPSUMPPARSER_H

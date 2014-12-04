@@ -1,6 +1,7 @@
 #include "tcpdumpparser.h"
 
 #include <algorithm>
+#include <cctype>
 #include <sstream>
 
 TcpDumpParser::TcpDumpParser(std::istream& input_stream): input(input_stream)
@@ -40,20 +41,43 @@ TcpDumpParser::dns_packet TcpDumpParser::parce(const std::string& dump_str)
 	}
 
 	str >> buffer;
-	std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
-	if (buffer.find("nxdomain")==buffer.npos) {
-		while (std::getline(str, buffer, ',')) {
-			dns_packet::record record;
-			std::stringstream tmp(buffer);
-			tmp >> record.type >> record.value;
-			if (record.type != "") {
-				result.records.push_back(record);
-			}
+	if (is_nxdomain(buffer)) {
+		result.records.push_back({ "nxdomain", "" });
+		return result;
+	}
+	if (!is_last_trash(buffer)) {
+		for (size_t i = 0; i < buffer.size(); i++) {
+			str.unget();
 		}
 	}
-	else {
-		result.records.push_back({"nxdomain",""});
+	while (std::getline(str, buffer, ',')) {
+		dns_packet::record record;
+		std::stringstream tmp(buffer);
+		tmp >> record.type >> record.value;
+		if (record.type != "") {
+			result.records.push_back(record);
+		}
 	}
-
 	return result;
+}
+
+bool TcpDumpParser::is_nxdomain(const std::string& str)
+{
+	std::string buffer(str);
+	std::transform(buffer.begin(), buffer.end(), buffer.begin(), ::tolower);
+	return buffer.find("nxdomain") != buffer.npos;
+}
+
+bool TcpDumpParser::is_last_trash(const std::string& str)
+{
+	int slash_count = 0;
+	bool ok = std::all_of(str.begin(), str.end(), [&](char c)->bool {
+		if (c == '/') {
+			slash_count++;
+			return true;
+		}
+		return std::isdigit(c);
+	});
+	if (ok && slash_count==2) return true;
+	if (str == "[1au]") return true;
 }
