@@ -18,6 +18,6 @@ clean:
 	rm -rf $(BUILD_DIR) $(OUTPUT_NAME)
 
 run: all
-	sudo tcpdump -ttlni eth0 port 53 and net 192.168.1.0/24 | ./$(OUTPUT_NAME)
+	sudo tcpdump -ttlni eth0 port 53 and net 192.168.1.0/24 | sudo ./$(OUTPUT_NAME)
 
 -include $(SOURCES:%.cpp=$(BUILD_DIR)%.d)
