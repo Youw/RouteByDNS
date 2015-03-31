@@ -21,7 +21,7 @@ private:
 	void removeFirstForPacket(const TcpDumpParser::dns_packet& second_packet);
 	static bool hasNameToResolve(const TcpDumpParser::dns_packet& packet);
 	void addFrstPacket(const TcpDumpParser::dns_packet& first_packet);
-	
+
 	IPDNSPackets wait_packets;
 };
 

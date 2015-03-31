@@ -1,6 +1,6 @@
 SOURCES=main.cpp tcpdumpparser.cpp dnsipprocessor.cpp dnspacketprocessor.cpp
 GXX_FLAGS=-std=c++11 -O2 -pipe -MMD -MP
-BUILD_DIR=bin/
+BUILD_DIR=obj/
 OUTPUT_NAME=route_by_dns
 
 all: $(OUTPUT_NAME)
@@ -18,6 +18,6 @@ clean:
 	rm -rf $(BUILD_DIR) $(OUTPUT_NAME)
 
 run: all
-	sudo tcpdump -ttlni eth0 port 53 and net 192.168.1.0/24 | sudo ./$(OUTPUT_NAME)
+	sudo tcpdump -ttlni eth1.1415 port 53 and net 192.168.61.0/24 | sudo ./$(OUTPUT_NAME)
 
 -include $(SOURCES:%.cpp=$(BUILD_DIR)%.d)

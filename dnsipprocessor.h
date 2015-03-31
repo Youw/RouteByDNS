@@ -12,6 +12,11 @@ public:
 	using NameList = std::vector<std::string>;
 
 	DNSIPProcessor(const NameList& allowed_dns_names);
+	DNSIPProcessor(const DNSIPProcessor&) = delete;
+	DNSIPProcessor& operator=(const DNSIPProcessor&) = delete;
+	DNSIPProcessor(DNSIPProcessor&&) = delete;
+	DNSIPProcessor& operator=(DNSIPProcessor&&) = delete;
+	~DNSIPProcessor();
 
 	struct dns_ip
 	{

@@ -1,20 +1,20 @@
 #include "dnsipprocessor.h"
 
 #include <algorithm>
-#ifdef WIN32
-#include<iostream>
-#endif
 
 DNSIPProcessor::DNSIPProcessor(const NameList& allowed_dns_names) :
 	allowed_names(allowed_dns_names)
 {
-#ifndef WIN32
 	int system_ret = system("/etc/route_by_dns/startup.sh");
 	(void)system_ret;
-#else
-	std::cout << "/etc/route_by_dns/startup.sh";
-#endif
 }
+
+DNSIPProcessor::~DNSIPProcessor()
+{
+        int system_ret = system("/etc/route_by_dns/shutdown.sh");
+	(void)system_ret;
+}
+
 
 void DNSIPProcessor::process(const dns_ip& query)
 {
@@ -36,12 +36,8 @@ void DNSIPProcessor::addToWhiteList(const std::string& ip, const std::string& na
 {
 	if (!ipInWhiteList(ip)) {
 		allowed_ip.insert(ip);
-#ifndef WIN32
-		int system_ret = system(("/etc/route_by_dns/add_ip.sh " + ip + " " + name).c_str());
+		int system_ret = system(("/etc/route_by_dns/add_ip.sh \"" + ip + "\" \"" + name + "\"").c_str());
 		(void)system_ret;
-#else
-		std::cout << ("/etc/route_by_dns/add_ip.sh " + ip + " " + name).c_str();
-#endif
 	}
 }
 
